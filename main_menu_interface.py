@@ -1,5 +1,4 @@
 import pygame
-import random
 import sys
 
 
@@ -25,9 +24,8 @@ HEIGHT = 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 size = 19
 
-BLACK = (0, 0, 0)
+
 WHITE = (255,255,255)
-ROSE = (139,69,19)
 background = pygame.image.load(r"C:\Users\nadjl\Downloads\backgroung.png")
 
 pygame.display.set_caption("Fruit Ninja")
@@ -39,7 +37,7 @@ play_rect = pygame.Rect(300, 125, 150, 100)
 quit_rect = pygame.Rect(300, 380, 150, 100)
 return_rect = pygame.Rect(300, 330, 150, 100)
 sound_rect = pygame.Rect(20, 530, TAILLE_ICONE[0], TAILLE_ICONE[1])
-difficulte_rect = pygame.Rect(300, 200, 200, 100)
+difficulty_rect = pygame.Rect(300, 200, 200, 100)
 easy_rect = pygame.Rect(300, 125, 150, 100)
 medium_rect = pygame.Rect(300, 250, 150, 100)
 hard_rect = pygame.Rect(300, 380, 150, 100)
@@ -50,20 +48,20 @@ def draw_main_page():
     pygame.draw.rect(screen, WHITE, option_rect, 5)
     pygame.draw.rect(screen, WHITE, play_rect, 5)
     pygame.draw.rect(screen, WHITE, quit_rect, 5)
-    jouer_text = font.render("PLAY", True, WHITE)
+    play_text = font.render("PLAY", True, WHITE)
     option_text = font.render("OPTION", True, WHITE)
-    quitter_text = font.render("QUIT", True, WHITE)
+    quit_text = font.render("QUIT", True, WHITE)
     screen.blit(option_text, (option_rect.x + 48, option_rect.y + 40))
-    screen.blit(jouer_text, (play_rect.x + 48, play_rect.y + 40))
-    screen.blit(quitter_text, (quit_rect.x + 48, quit_rect.y + 40))
+    screen.blit(play_text, (play_rect.x + 48, play_rect.y + 40))
+    screen.blit(quit_text, (quit_rect.x + 48, quit_rect.y + 40))
     draw_sound_button()
 
 
 def draw_option_page():
     """OPTION PAGE"""
-    pygame.draw.rect(screen, WHITE, difficulte_rect, 5)
-    difficulte_text = font.render("DIFFICULTIES", True, WHITE)
-    screen.blit(difficulte_text, (difficulte_rect.x + 48, difficulte_rect.y + 40))
+    pygame.draw.rect(screen, WHITE, difficulty_rect, 5)
+    difficulty_text = font.render("DIFFICULTIES", True, WHITE)
+    screen.blit(difficulty_text, (difficulty_rect.x + 48, difficulty_rect.y + 40))
     pygame.draw.rect(screen, WHITE, return_rect, 5)
     retour_text = font.render("RETURN", True, WHITE)
     screen.blit(retour_text, (return_rect.x + 48, return_rect.y + 40))
@@ -71,6 +69,7 @@ def draw_option_page():
     
 
 def draw_difficulties_page():
+    """DIFFICULTY PAGE"""
     pygame.draw.rect(screen,WHITE, easy_rect,5)
     pygame.draw.rect(screen,WHITE,medium_rect,5)
     pygame.draw.rect(screen,WHITE,hard_rect,5)
@@ -86,6 +85,7 @@ def draw_difficulties_page():
     draw_sound_button()
 
 def draw_sound_button():
+    """FUNCTION OF THE BUTTON"""
     if sound_active:
         screen.blit(unmute_sound, (sound_rect.x, sound_rect.y))
     else:
@@ -93,7 +93,7 @@ def draw_sound_button():
 
 # Game variables
 main_page = True
-difficuties_page = False
+difficulty_page = False
 option_page = False
 previous_page = None
 sound_active = True
@@ -117,29 +117,29 @@ while True:
                 if option_rect.collidepoint(event.pos):
                     main_page = False
                     option_page = True
-                    difficuties_page = False
+                    difficulty_page = False
                 elif play_rect.collidepoint(event.pos):
                     main_page = False
                 elif quit_rect.collidepoint(event.pos):
                     pygame.quit()
                     sys.exit()
             elif option_page:
-                if difficulte_rect.collidepoint(event.pos):
-                    difficuties_page = True
+                if difficulty_rect.collidepoint(event.pos):
+                    difficulty_page = True
                     option_page = False
                 elif return_rect.collidepoint(event.pos):
                     option_page = False
                     main_page = True
-            elif difficuties_page:
+            elif difficulty_page:
                 if return2_rect.collidepoint(event.pos):
                     option_page = True
-                difficuties_page = False
+                difficulty_page = False
 
         
     screen.blit(background,(0,0))
     if main_page:
         draw_main_page()
-    elif difficuties_page:
+    elif difficulty_page:
         draw_difficulties_page()
     elif option_page:
         draw_option_page()
