@@ -14,10 +14,14 @@ class Game:
         self.pause_duration = 3000
         self.bomb_triggered = False
         self.running = True
-
+        
         self.font = pygame.font.Font(None, 40)
         self.fruits = []
-        self.w_fruit()
+        self.spawn_fruit() 
+
+        self.bomb_sound = pygame.mixer.Sound("bomb-explosion.mp3")
+        self.freeze_sound = pygame.mixer.Sound("ice-cracking.mp3")
+
 
     def spawn_fruit(self):
         """Creates random fruits, bomb, and ice block"""
@@ -53,14 +57,19 @@ class Game:
         """Pauses the game temporarily"""
         if not self.bomb_triggered:
             self.is_paused = True
+            self.freeze_sound.play()
             print("Game paused!")
             pygame.time.set_timer(pygame.USEREVENT, self.pause_duration)
 
     def trigger_bomb(self):
         """Ends the game when the bomb touch"""
         self.bomb_triggered = True
+        self.bomb_sound.play() 
         print("BOOM! Game over...")
+
+        pygame.time.delay(2000) 
         self.running = False
+
 
     def remove_fruit(self, letter):
         """Removes a fruit or activates effects if the correct key is pressed."""
@@ -114,4 +123,5 @@ class Game:
         pygame.quit()
 
 if __name__ == "__main__":
+    game = Game()
     game.run()
