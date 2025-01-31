@@ -29,9 +29,9 @@ with open("words.txt", "r") as file:
     word_list = [word.strip() for word in file.readlines()]
 
 def words_random(file):
-    with open (file,"r") as f:
+    with open(file, "r") as f:
         words = f.read().splitlines()
-    return (random.choice(words))
+    return random.choice(words)
     
 def convert_hangman(word, found_letters):
     return " ".join([letter if letter in found_letters else "_" for letter in word])
@@ -47,8 +47,16 @@ def draw_main_page():
     words_text = font.render("ADD WORDS", True, black)
     quit_text = font.render("QUIT",True, black)
     screen.blit(words_text, (option_rect.x + 13, option_rect.y + 40))
-    screen.blit(play_text, (play_rect.x+ 48, play_rect.y + 40))
+    screen.blit(play_text, (play_rect.x + 48, play_rect.y + 40))
     screen.blit(quit_text, (quit_rect.x + 48, quit_rect.y + 40))
+
+    # Display top 5 scores
+    if top_scores:
+        y_offset = 200
+        for score_entry in top_scores:
+            top_score_text = font.render(score_entry.strip(), True, black)
+            screen.blit(top_score_text, (40, y_offset))
+            y_offset += 30
 
 
 # Add more words
@@ -58,7 +66,7 @@ user_text = ""
 # Add words menu
 def words_option_page():
     screen.fill(grey)
-    pygame.draw.rect(screen, black, return_rect, 5,)
+    pygame.draw.rect(screen, black, return_rect, 5)
     return_text = font.render("RETURN", True, black)
     screen.blit(return_text, (return_rect.x + 33, return_rect.y + 40,))
 
@@ -67,9 +75,9 @@ def words_option_page():
 def draw_hangman_page(word_hangman, try_remaining):
     screen.fill(grey)
     hangman_text = font.render(word_hangman, True, black)
-    screen.blit(hangman_text,(170,120))
-    try_text = font.render(f"Try remaining: {try_remaining}",True, black)
-    screen.blit(try_text,(150,70))
+    screen.blit(hangman_text, (170,120))
+    try_text = font.render(f"Try remaining: {try_remaining}", True, black)
+    screen.blit(try_text, (150,70))
 
 
 # Win / Lose
@@ -80,10 +88,27 @@ lose_condition = font2.render("You Lose", False, black)
 # Function to save score
 def save_score(name, score):
     try:
-        with open(r"C:\Users\fatyl\pendu\fruit_scores.txt", "a") as fichier:            fichier.write(f"{name}: {score}\n")
-        print(f"Score save, {name}!")
+        with open(r"C:\Users\fatyl\pendu\fruit_scores.txt", "a") as fichier:
+            fichier.write(f"{name}: {score}\n")
+        print(f"Score saved, {name}!")
     except Exception as e:
-        print(f"Error : {e}")
+        print(f"Error: {e}")
+
+#-------------------------------------------------------------------------------------------------
+# Function to get the top 5 scores
+def get_top_scores(file_path):
+    try:
+        with open(file_path, "r") as file:
+            scores = file.readlines()
+
+        # Sort scores by the numeric value, descending order
+        scores = sorted(scores, key=lambda x: int(x.split(": ")[1]), reverse=True)
+
+        # Return the top 5 scores
+        return scores[:5]
+    except FileNotFoundError:
+        return []
+
 #-------------------------------------------------------------------------------------------------
 # Main loop
 score = 0
@@ -91,7 +116,7 @@ main_page = True
 in_game = False
 found_letters = set()
 try_remaining = 6
-
+top_scores = get_top_scores(r"C:\Users\fatyl\pendu\fruit_scores.txt") #------------------------------------------------------------------------------------------
 
 # Game loop
 while True:
@@ -118,7 +143,6 @@ while True:
                     main_page = True
                     in_game = False
 
-
         if in_game and event.type == pygame.KEYDOWN:
             letter = event.unicode.lower()
             if letter in found_letters:
@@ -127,7 +151,7 @@ while True:
             if letter not in word:
                 try_remaining -= 1
             else:
-                score += 10 
+                score += 10
 
 
     if main_page:
@@ -149,9 +173,10 @@ while True:
             score += 30
             pygame.display.flip()
             pygame.time.delay(3000)
-            #------------------------------------------------------------------------
-            name = input("Your name : ")
+            #------------------------------------------------------------------------------------------
+            name = input("Your name: ")
             save_score(name, score)
+            top_scores = get_top_scores(r"C:\Users\fatyl\pendu\fruit_scores.txt")  
             main_page = True
             in_game = False
             
@@ -160,9 +185,10 @@ while True:
             score -= 20
             pygame.display.flip()
             pygame.time.delay(3000)
-            name = input("Your name : ")
-            save_score(name, score)  
-            #------------------------------------------------------------------------            
+            name = input("Your name: ")
+            save_score(name, score)
+            top_scores = get_top_scores(r"C:\Users\fatyl\pendu\fruit_scores.txt")
+            #------------------------------------------------------------------------------------------  
             main_page = True
             in_game = False
 
@@ -189,3 +215,4 @@ while True:
         screen.blit(text_surface, (100, 100))
 
     pygame.display.flip()
+
