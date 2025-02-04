@@ -12,9 +12,9 @@ pygame.mixer.music.set_volume(0.5)
 unmute_sound = pygame.image.load("images/sound_on.png")
 mute_sound = pygame.image.load("images/sound_off.png")
 
-TAILLE_ICONE = (50,50)
-unmute_sound = pygame.transform.scale(unmute_sound, TAILLE_ICONE) 
-mute_sound = pygame.transform.scale(mute_sound, TAILLE_ICONE)
+SIZE_ICONE = (50,50)
+unmute_sound = pygame.transform.scale(unmute_sound, SIZE_ICONE) 
+mute_sound = pygame.transform.scale(mute_sound, SIZE_ICONE)
 
 
 
@@ -36,7 +36,7 @@ option_rect = pygame.Rect(300, 250, 150, 100)
 play_rect = pygame.Rect(300, 125, 150, 100)
 quit_rect = pygame.Rect(300, 380, 150, 100)
 return_rect = pygame.Rect(300, 330, 150, 100)
-sound_rect = pygame.Rect(20, 530, TAILLE_ICONE[0], TAILLE_ICONE[1])
+sound_rect = pygame.Rect(20, 530, SIZE_ICONE[0], SIZE_ICONE[1])
 difficulty_rect = pygame.Rect(300, 200, 200, 100)
 easy_rect = pygame.Rect(300, 125, 150, 100)
 medium_rect = pygame.Rect(300, 250, 150, 100)
@@ -62,9 +62,9 @@ def draw_option_page():
     pygame.draw.rect(screen, WHITE, difficulty_rect, 5)
     pygame.draw.rect(screen, WHITE, return_rect, 5)
     difficulty_text = FONT.render("DIFFICULTIES", True, WHITE)
-    retour_text = FONT.render("RETURN", True, WHITE)
+    return_text = FONT.render("RETURN", True, WHITE)
     screen.blit(difficulty_text, (difficulty_rect.x + 48, difficulty_rect.y + 40))
-    screen.blit(retour_text, (return_rect.x + 48, return_rect.y + 40))
+    screen.blit(return_text, (return_rect.x + 48, return_rect.y + 40))
     draw_sound_button()
     
 
