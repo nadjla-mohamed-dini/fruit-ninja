@@ -14,7 +14,6 @@ SCREEN_HEIGHT = 650
 CLOCK = pygame.time.Clock()
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("fruits ninja")
-WHITE = (255, 255, 255)
 BACKGROUND = pygame.image.load("images/background.png")
 
 

@@ -1,103 +1,120 @@
 import pygame
+import time
 import random
 import sys
-import os
+
 
 pygame.init()
-
-CLOCK = pygame.time.Clock()
-SCREEN = pygame.display.set_mode((700, 650))
-pygame.display.set_caption("Jumping in PyGame")
 
 X_POSITION = random.randint(30, 620)
 Y_POSITION = 880
 jumping = False
-
 Y_GRAVITY = 1
 JUMP_HEIGHT = 40
 Y_VELOCITY = JUMP_HEIGHT
-AA = pygame.image.load("images/letters/a_letter.png")
-ZZ = pygame.image.load("images/letters/z_letter.png")
-EE = pygame.image.load("images/letters/e_letter.png")
 
-BACKGROUND = pygame.image.load("images/background.png")
-BLACK = (0, 0, 0)
+
+SCREEN_WIDTH = 700
+SCREEN_HEIGHT = 650
+
+CLOCK = pygame.time.Clock()
+SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("fruits ninja")
 WHITE = (255, 255, 255)
-
-
-
-
-
-
-STANDING_SURFACE = pygame.transform.scale(pygame.image.load("images/fruits/apple.png"), (48, 64))
-LETTER = pygame.transform.scale(ZZ, (20, 30))
-JUMPING_SURFACE = pygame.transform.scale(pygame.image.load("images/fruits/apple.png"), (48, 64))
 BACKGROUND = pygame.image.load("images/background.png")
 
-FRUITS_RECT = STANDING_SURFACE.get_rect(center=(X_POSITION, Y_POSITION))
 
 
-COLLISION = pygame.transform.scale(pygame.image.load("images/collision.png"), (700, 650))
+# X axis
+x = random.randint(30, 630)
+# Y axis
+y = 550
+
+# Fruit size
+FRUIT_SIZE_X = random.randint(50, 100)
+FRUIT_SIZE_Y = FRUIT_SIZE_X
+ 
+
+# Choice fruit
+def fruit():
+    BANANA = pygame.transform.scale(pygame.image.load("images/fruits/banana.png"), (FRUIT_SIZE_X, FRUIT_SIZE_Y))
+    APPLE = pygame.transform.scale(pygame.image.load("images/fruits/apple.png"), (FRUIT_SIZE_X, FRUIT_SIZE_Y))
+    GRAPE = pygame.transform.scale(pygame.image.load("images/fruits/grape.png"), (FRUIT_SIZE_X, FRUIT_SIZE_Y))
+    STRAWBERRY = pygame.transform.scale(pygame.image.load("images/fruits/strawberry.png"), (FRUIT_SIZE_X, FRUIT_SIZE_Y))
+    BOMB = pygame.transform.scale(pygame.image.load("images/fruits/bomb.png"), (FRUIT_SIZE_X, FRUIT_SIZE_Y))
+    ICE = pygame.transform.scale(pygame.image.load("images/fruits/ice.png"), (FRUIT_SIZE_X, FRUIT_SIZE_Y))
+
+    random_fruit = random.randint(1, 6)
+    if random_fruit == 1:
+        fruit_image = APPLE
+    if random_fruit == 2:
+        fruit_image = GRAPE
+    if random_fruit == 3:
+        fruit_image = BANANA
+    if random_fruit == 4:
+        fruit_image = STRAWBERRY
+    if random_fruit == 5:
+        fruit_image = ICE
+    if random_fruit == 6:
+        fruit_image = BOMB
+
+
+# Choice letter
+letter_image = pygame.image.load("images/letters/e_letter.png")
+def letter():
+    random_letter = random.randint(1, 3)
+    if random_letter == 1:
+        letter_image = pygame.image.load("images/letters/a_letter.png")
+    if random_letter == 2:
+        letter_image = pygame.image.load("images/letters/z_letter.png")
+    if random_letter == 3:
+        letter_image = pygame.image.load("images/letters/e_letter.png")
+
+
+# Fruit definition
+fruit_image = pygame.image.load("images/letters/a_letter.png")
+FRUITS_RECT = fruit_image.get_rect(center=(x, y))
+
+def spawn_fruit():
+    fruit()
+    letter()
+    FRUITS_RECT = center=(x, y)
+    SCREEN.blit(fruit_image, FRUITS_RECT)
+    SCREEN.blit(letter_image, FRUITS_RECT)  
 
 
 
-RUNNING = True
+
+running = True
+
+while running:
+    CLOCK.tick(120)
+    SCREEN.blit(BACKGROUND, (0, 0))
 
 
-
-def random_file(directory):
-    files = os.listdir(directory)
-    random_file = random.choice(files)
-    return random_file
-directory = 'images/letters'
-selected_file = random_file(directory)
-print("Selected file:", selected_file)
-
-
-# Game loop
-while RUNNING:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-    SCREEN.blit(BACKGROUND, (0, 0))
-    SCREEN.blit(COLLISION, (0, 0))
 
+
+    spawn_fruit()
 
 
     keys_pressed = pygame.key.get_pressed()
-
     if keys_pressed[pygame.K_SPACE]:
-        jumping = True
-       
+            jumping = True
+    if keys_pressed[pygame.K_z] and Y_POSITION < 650:
+        fruit()
+        letter()
 
-# Moving fruits
-    if jumping:
-        Y_POSITION -= Y_VELOCITY 
-        Y_VELOCITY -= Y_GRAVITY
-        if Y_VELOCITY < -JUMP_HEIGHT:
-            JUMP_HEIGHT = 40
-
-            jumping = False
-            Y_VELOCITY = JUMP_HEIGHT
-        FRUITS_RECT = center=(X_POSITION, Y_POSITION)
-        SCREEN.blit(JUMPING_SURFACE, FRUITS_RECT)
-        SCREEN.blit(LETTER, FRUITS_RECT)
+    if Y_POSITION > 660:
+        print("falling")
 
 
-        
-    else:
-        FRUITS_RECT =center=(X_POSITION, Y_POSITION)
-        SCREEN.blit(STANDING_SURFACE, FRUITS_RECT)
-        SCREEN.blit(LETTER, FRUITS_RECT)
-
-        X_POSITION = random.randint(30, 635)
-
-        
 
 
-    pygame.display.update()
-    CLOCK.tick(30)
 
+    pygame.display.flip()
 
-    # faire des fond differents accordés avec la musique, modifiable dans les paramètres
+pygame.quit()
