@@ -29,7 +29,7 @@ background = pygame.image.load(r"C:\Users\nadjl\Downloads\backgroung.png")
 pygame.display.set_caption("Fruit Ninja")
 FONT = pygame.font.Font(None, SIZE)
 
-# Boutons du menu
+# Buttons
 option_rect = pygame.Rect(300, 250, 150, 100)
 play_rect = pygame.Rect(300, 125, 150, 100)
 quit_rect = pygame.Rect(300, 380, 150, 100)
@@ -41,13 +41,13 @@ medium_rect = pygame.Rect(300, 250, 150, 100)
 hard_rect = pygame.Rect(300, 380, 150, 100)
 return2_rect = pygame.Rect(300, 500, 150, 100)
 
-# Variables du menu
+# menu
 main_page = True
 difficulty_page = False
 option_page = False
 sound_active = True
 
-# Variables du jeu
+# game
 score = 0
 combo_multiplicator = 1
 last_hit_time = 0
@@ -62,7 +62,7 @@ ice_blocks = []
 spawn_timer = 0
 spawn_interval = 950
 
-# Charger les images de fruits
+# define image fruit
 fruit_images = [
     pygame.image.load(r"C:\Users\nadjl\apple_tran.png").convert_alpha(),
     pygame.image.load(r"C:\Users\nadjl\grape_tran.png").convert_alpha(),
@@ -70,14 +70,14 @@ fruit_images = [
     pygame.image.load(r"C:\Users\nadjl\strawberry_tran.png").convert_alpha(),
 ]
 
-# Charger les autres images
+# other images
 bomb_image = pygame.image.load(r"C:\Users\nadjl\bomb_tran.png").convert_alpha()
 ice_block_image = pygame.image.load(r"C:\Users\nadjl\ice_tran.png").convert_alpha()
 
 
 
 
-# Fonctions du menu
+# function of the menu
 def draw_main_page():
     """MAIN PAGE"""
     pygame.draw.rect(screen, WHITE, option_rect, 5)
@@ -124,13 +124,13 @@ def draw_sound_button():
     else:
         screen.blit(mute_sound, (sound_rect.x, sound_rect.y))
 
-# Fonctions du jeu
+# Function of the game
 def load_random_letter():
     letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     return random.choice(letters)
 
 def spawn_object():
-    object_type = random.choice(["fruit", "bomb", "ice_block"])
+    object_type = random.choice(["fruit","fruit", "bomb", "ice_block"])
 
     if object_type == "fruit":
         fruits.append({
@@ -199,7 +199,7 @@ def draw_game_over():
     text_rect = game_over_text.get_rect(center=(WIDTH // 2, HEIGHT // 2))  
     screen.blit(game_over_text, text_rect)
 
-# Boucle principale
+# main loop
 clock = pygame.time.Clock()
 running = True
 game_over = False  
@@ -259,18 +259,18 @@ while True:
     elif option_page:
         draw_option_page()
     elif not main_page and not option_page and not difficulty_page:
-        # Boucle du jeu
+        # game loop
         if not game_over:
             spawn_timer += clock.get_time()
             if spawn_timer >= spawn_interval:
                 spawn_object()
                 spawn_timer = 0
 
-            # Vérifier si le gel est terminé
+            # freeze verify
             if frozen and time.time() > freeze_end_time:
                 frozen = False  
 
-            # Déplacer et afficher les fruits
+            # moving fruit
             for fruit in fruits:
                 if not frozen:  
                     if fruit["direction"] == "up":
@@ -326,7 +326,7 @@ while True:
         if game_over:
             draw_game_over()
             pygame.display.flip()
-            time.sleep(2)  # Attendre 2 secondes
+            time.sleep(2)  # delay 
             main_page = True
             game_over = False
 
